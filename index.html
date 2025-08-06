@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>FutureBaby AI Prediction</title>
+</head>
+<body>
+    <h1>Upload Baby 4D Ultrasound Photo</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required />
+        <button type="submit">Predict Future Look</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const res = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        if(data.error){
+            document.getElementById('result').innerText = 'Error: ' + data.error;
+        } else {
+            document.getElementById('result').innerHTML = '<img src="' + data.result_url + '" alt="Prediction Result" width="300" />';
+        }
+    });
+    </script>
+</body>
+</html>
